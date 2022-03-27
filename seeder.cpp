@@ -37,8 +37,6 @@ int main() {
 		for (auto n = std::begin(devices); n != std::end(devices); ++n) {
 			const int in[7] = { i, rolls[0], rolls[1], rolls[2], rolls[3], rolls[4], (((900000000000000/devices.size())*deviceIndex)+100000000000000)/10000000 };
 
-			std::cout << deviceIndex;
-
 			cl::Context context(devices[deviceIndex]);
 			cl::Program program(context, sources);
 
