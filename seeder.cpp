@@ -12,17 +12,10 @@ int main() {
 	std::vector<cl::Device> devices;
 	platform.getDevices(CL_DEVICE_TYPE_GPU, &devices);
 
-	auto device = devices.front();
-
 	std::ifstream KERNELgpucode("gpucode.cl");
 	std::string src(std::istreambuf_iterator<char>(KERNELgpucode), (std::istreambuf_iterator<char>()));
 
 	cl::Program::Sources sources(1, std::make_pair(src.c_str(), src.length() + 1));
-
-	cl::Context context(devices);
-	cl::Program program(context, sources);
-
-	auto err = program.build("-cl-std=CL1.2");
 
 	int rolls[5];
 	std::cout << "First roll (excluding leftmost zeros): ";
@@ -43,6 +36,13 @@ int main() {
 		int deviceIndex = 0;
 		for (auto n = std::begin(devices); n != std::end(devices); ++n) {
 			const int in[7] = { i, rolls[0], rolls[1], rolls[2], rolls[3], rolls[4], (((900000000000000/devices.size())*deviceIndex)+100000000000000)/10000000 };
+
+			std::cout << deviceIndex;
+
+			cl::Context context(devices[deviceIndex]);
+			cl::Program program(context, sources);
+
+			auto err = program.build("-cl-std=CL1.2");
 
 			cl::Buffer input(context, CL_MEM_READ_ONLY, sizeof(int) * 7); // Input buffer
 			cl::Buffer output(context, CL_MEM_WRITE_ONLY | CL_MEM_HOST_READ_ONLY, sizeof(long long) * 2); // Output buffer
@@ -75,7 +75,3 @@ int main() {
 
 	system("pause");
 }
-
-
-
-//const int in[7] = { 0, 369222, 53070, 944890, 383214, 484330, 10000000 };
