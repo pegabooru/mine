@@ -95,6 +95,8 @@ __kernel void seedKernel(__global const int *args, __global long *output) {
 
     ulong zeed = ((ulong)pass*2147483646) + ((ulong)start*10000000) + (ulong)gid;
 
+    printf("%lu\n", zeed);
+
     //if (zeed >= 100002147483645) printf("gid %d.. pass %d.. start %d.. zeed %ld\n", gid, pass, start, zeed);
     //if (gid < 10) printf("gid %d\n", gid);
     //if (gid > 2147483640) printf("gid %d\n", gid);
